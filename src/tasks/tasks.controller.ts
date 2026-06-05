@@ -7,10 +7,12 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { GetTasksQueryDto } from './dto/get-tasks-query.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -22,8 +24,13 @@ export class TasksController {
   }
 
   @Get()
-  findAll() {
-    return this.taskService.findAll();
+  findAll(@Query() query: GetTasksQueryDto) {
+    const tasks = this.taskService.findAll(query);
+
+    return {
+      count: tasks.length,
+      data: tasks,
+    };
   }
 
   @Get(':id')
