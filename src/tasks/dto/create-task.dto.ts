@@ -3,17 +3,19 @@ import { TaskPriority, TaskStatus } from 'src/common/enums/task-status.enum';
 export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @IsString()
   @IsNotEmpty()
   description?: string;
 
   @IsEnum(TaskStatus)
-  status: TaskStatus;
+  @IsOptional()
+  status?: TaskStatus;
 
   @IsEnum(TaskPriority)
-  priority: TaskPriority;
+  @IsOptional()
+  priority?: TaskPriority;
 
   @IsString()
   @IsOptional()

@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -24,8 +23,8 @@ export class TasksController {
   }
 
   @Get()
-  findAll(@Query() query: GetTasksQueryDto) {
-    const tasks = this.taskService.findAll(query);
+  async findAll(@Query() query: GetTasksQueryDto) {
+    const tasks = await this.taskService.findAll(query);
 
     return {
       count: tasks.length,
@@ -34,21 +33,18 @@ export class TasksController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: number) {
     return this.taskService.findOne(id);
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateTaskDto: UpdateTaskDto,
-  ) {
+  update(@Param('id') id: number, @Body() updateTaskDto: UpdateTaskDto) {
     return this.taskService.update(id, updateTaskDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    this.taskService.remove(id);
+  async remove(@Param('id') id: number) {
+    await this.taskService.remove(id);
     return {
       message: 'Task deleted successfully',
     };
