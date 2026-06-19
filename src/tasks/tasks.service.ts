@@ -3,7 +3,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { GetTasksQueryDto } from './dto/get-tasks-query.dto';
 import { Model, QueryFilter } from 'mongoose';
-import { Task, TaskDocument } from 'src/schemas/task.schema';
+import { Task, TaskDocument } from '../schemas/task.schema';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
@@ -51,7 +51,7 @@ export class TasksService {
     return this.taskModel.find(filter).sort({ createdAt: -1 }).exec();
   }
 
-  async findOne(id: number): Promise<Task> {
+  async findOne(id: string): Promise<Task> {
     const task = await this.taskModel.findById(id);
     if (!task) {
       throw new NotFoundException(`Task with id ${id} not found`);
@@ -60,7 +60,7 @@ export class TasksService {
     return task;
   }
 
-  async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
+  async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
     const task = await this.taskModel
       .findByIdAndUpdate(id, updateTaskDto, {
         new: true,
@@ -74,7 +74,7 @@ export class TasksService {
     return task;
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     const task = await this.taskModel.findByIdAndDelete(id).exec();
     if (!task) {
       throw new NotFoundException(`Task with id ${id} not found`);
